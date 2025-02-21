@@ -8,28 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        body {
-            background-color: #121212;
-            color: #e0e0e0;
-            font-family: Arial, sans-serif;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            background: #1e1e1e;
-            padding: 30px;
-            border-radius: 12px;
-            /* box-shadow: 0 0 15px rgba(0, 140, 255, 0.3); */
-        }
-
-        h2 {
-            text-align: center;
-            font-weight: bold;
-            /* color: #008cff; */
-            /* text-shadow: 0px 0px 10px rgba(0, 140, 255, 0.5); */
-        }
-
         .step {
             display: none;
         }
@@ -37,71 +15,27 @@
         .step.active {
             display: block;
         }
-
-        label {
-            font-weight: bold;
-            /* color: #008cff; */
-        }
-
-        .form-control {
-            background: #292929;
-            border: 1px solid #444;
-            color: #e0e0e0;
-            transition: 0.3s;
-        }
-
-        .form-control:focus {
-            border-color: #008cff;
-            box-shadow: 0 0 10px rgba(0, 140, 255, 0.5);
-            background: #333;
-        }
-
-        .btn {
-            border-radius: 8px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .btn-primary {
-            background: #008cff;
-            border: none;
-            color: #ffffff;
-        }
-
-        .btn-primary:hover {
-            background: #0073cc;
-        }
-
-        .btn-secondary {
-            background: #444;
-            border: none;
-            color: #e0e0e0;
-        }
-
-        .btn-secondary:hover {
-            background: #666;
-        }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h2>Vehicle Inquiry Form</h2>
+    <div class="container mt-5">
+        <h2 class="text-center">Vehicle Inquiry Form</h2>
         <form id="multiStepForm">
             <!-- Customer Information -->
-            <div class="step active">
+            <div class="step">
                 <h4>Customer Information</h4>
                 <div class="mb-3">
                     <label class="form-label">Full Name</label>
-                    <input type="text" class="form-control" required>
+                    <input type="text" value="Prof" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Email Address</label>
-                    <input type="email" class="form-control" required>
+                    <input type="email" value="prof@gmail.com" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Phone Number</label>
-                    <input type="tel" class="form-control" required>
+                    <input type="tel" value="0880" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Address</label>
@@ -143,14 +77,16 @@
                 </div>
             </div>
 
-            <div class="text-center mt-3">
+            <div>
                 <button type="button" id="prevBtn" class="btn btn-secondary" onclick="changeStep(-1)">Previous</button>
-                <button type="button" id="nextBtn" class="btn btn-primary" onclick="changeStep(1)">Next</button>
+                <button type="submit" id="nextBtn" class="btn btn-success" onclick="changeStep(1)">Submit
+                    Inquiry</button>
             </div>
         </form>
     </div>
 
     <script>
+
         let currentStep = 0;
         const steps = document.querySelectorAll('.step');
         const prevBtn = document.getElementById('prevBtn');
@@ -162,12 +98,13 @@
                 if (index === step) s.classList.add('active');
             });
 
-            prevBtn.style.display = step === 0 ? 'none' : 'inline-block';
+            prevBtn.style.display = step === 0 ? 'none' : 'inline';
             nextBtn.textContent = step === steps.length - 1 ? 'Submit' : 'Next';
-        };
+        }
 
         function changeStep(direction) {
-            const currentForm = steps[currentStep].querySelectorAll('input, textarea, select');
+            // Validate current step before moving forward
+            const currentForm = steps[currentStep].querySelectorAll('input');
             let isValid = true;
 
             currentForm.forEach(input => {
@@ -179,16 +116,21 @@
 
             if (direction === 1 && !isValid) return;
 
-            currentStep += direction;
+            currentStep += direction; // Move step
             if (currentStep >= steps.length) {
-                alert('Form submitted successfully!');
+                document.getElementById('multiStepForm').submit(); // Submit form
                 return;
             }
-            showStep(currentStep);
+            showStep(currentStep); // Update UI
         }
 
         showStep(currentStep);
+
+
+
     </script>
+
+
 </body>
 
 </html>
