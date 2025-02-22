@@ -85,10 +85,10 @@
 </head>
 
 <body>
-    <!-- action="https://formspree.io/f/mpwqbjlw" -->
+    <!-- action="https://formspree.io/f/mpwqbjlw"    -->
     <div class="container">
         <h2>Vehicle Inquiry Form</h2>
-        <form id="multiStepForm"  method="POST">
+        <form id="multiStepForm">
             <div class="step active">
                 <!-- <h4>Customer Information</h4> -->
                 <div class="mb-3">
@@ -121,12 +121,17 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Pickup Date & Time</label>
-                    <input type="datetime-local" name="pickup_datetime" class="form-control" required>
+                    <input type="datetime-local" name="pickup_datetime" id="pickupDate" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Return Date & Time</label>
-                    <input type="datetime-local" name="return_datetime" class="form-control" required>
+                    <input type="datetime-local" name="return_datetime" id="returnDate" class="form-control" required>
                 </div>
+                <div class="mb-3">
+                    <label class="form-label">Rental Duration (Hours)</label>
+                    <input type="text" id="rentalDuration" class="form-control" readonly>
+                </div>
+
                 <div class="mb-3">
                     <label class="form-label">Vehicle Type</label>
                     <select name="vehicle_type" class="form-control">
@@ -192,6 +197,29 @@
             showStep(currentStep);
         }
 
+        function calculateDuration() {
+            const pickupDate = document.getElementById("pickupDate").value;
+            const returnDate = document.getElementById("returnDate").value;
+            const durationField = document.getElementById("rentalDuration");
+
+            if (pickupDate && returnDate) {
+                const start = new Date(pickupDate);
+                const end = new Date(returnDate);
+
+                if (end > start) {
+                    const diffMs = end - start; // Difference in milliseconds
+                    const diffHours = Math.floor(diffMs / (1000 * 60 * 60)); // Get whole hours
+                    const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60)); // Get remaining minutes
+
+                    durationField.value = `${diffHours} hours ${diffMinutes} minutes`;
+                } else {
+                    durationField.value = "Invalid dates";
+                }
+            }
+        }
+
+        document.getElementById("pickupDate").addEventListener("change", calculateDuration);
+        document.getElementById("returnDate").addEventListener("change", calculateDuration);
 
         showStep(currentStep);
     </script>
